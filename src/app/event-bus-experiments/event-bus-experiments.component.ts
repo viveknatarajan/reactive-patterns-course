@@ -11,10 +11,7 @@ import { testLessons } from '../shared/model/test-lessons';
 export class EventBusExperimentsComponent implements OnInit {
 
   ngOnInit() {
-    setTimeout(() => {
-      store.initializeLessonList(testLessons.slice(0));
-    }, 10000);
-    // TODO:
+    store.initializeLessonList(testLessons.slice(0));
   }
 
   addLesson(lessonText: string) {

@@ -18,7 +18,7 @@ export class LessonsListComponent implements OnInit, Observer<Lesson[]> {
     store.lessonList$.subscribe(this);
   }
 
-  next(data: Lesson[]) {
+  next = (data: Lesson[]) => {
     this.lessons = data;
   }
 

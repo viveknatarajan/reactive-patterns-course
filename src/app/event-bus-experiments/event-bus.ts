@@ -4,7 +4,6 @@ import { Subject, Observable, BehaviorSubject } from 'rxjs';
 
 class DataStore {
 
-    private lessons: Lesson[] = [];
     private lessonListSubject = new BehaviorSubject([]);
 
     public lessonList$: Observable<Lesson[]> = this.lessonListSubject.asObservable();
@@ -13,29 +12,30 @@ class DataStore {
     }
 
     initializeLessonList(newLessons: Lesson[]) {
-        this.lessons = _.cloneDeep(newLessons);
-        this.broadcast();
+        this.lessonListSubject.next(_.cloneDeep(newLessons));
     }
 
     addLesson(lesson: Lesson) {
-        this.lessons.push(_.cloneDeep(lesson));
-        this.broadcast();
+        const lessons = this.cloneLessons();
+        lessons.push(lesson);
+        this.lessonListSubject.next(lessons);
     }
 
     delete(lesson: Lesson) {
-        _.remove(this.lessons, ele => ele.id === lesson.id);
-        this.broadcast();
+        const lessons = this.cloneLessons();
+        _.remove(lessons, ele => ele.id === lesson.id);
+        this.lessonListSubject.next(lessons);
     }
 
     toggleLessonViewed(lesson: Lesson) {
-        const lessonToggle = _.find(this.lessons, ele => ele.id === lesson.id);
+        const lessons = this.cloneLessons();
+        const lessonToggle = _.find(lessons, ele => ele.id === lesson.id);
         lessonToggle.completed = !lessonToggle.completed;
-        this.broadcast();
+        this.lessonListSubject.next(lessons);
     }
 
-
-    broadcast() {
-        this.lessonListSubject.next(_.cloneDeep(this.lessons));
+    private cloneLessons() {
+        return _.cloneDeep(this.lessonListSubject.getValue());
     }
 }
 

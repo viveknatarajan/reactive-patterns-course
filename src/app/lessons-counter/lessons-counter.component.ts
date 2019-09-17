@@ -12,7 +12,7 @@ export class LessonsCounterComponent implements OnInit, Observer<Lesson[]> {
 
   totalLessons = 0;
 
-  next(data: Lesson[]) {
+  next = (data: Lesson[]) => {
     this.totalLessons = data.length;
   }
 
