@@ -1,17 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { Observer, store } from '../event-bus-experiments/event-bus';
+import { store } from '../event-bus-experiments/event-bus';
 import { Lesson } from '../shared/model/lesson';
+import { Observer } from 'rxjs';
 
 @Component({
   selector: 'lessons-counter',
   templateUrl: './lessons-counter.component.html',
   styleUrls: ['./lessons-counter.component.scss']
 })
-export class LessonsCounterComponent implements OnInit, Observer {
-
-  constructor() {
-    store.subscribe(this);
-  }
+export class LessonsCounterComponent implements OnInit, Observer<Lesson[]> {
 
   totalLessons = 0;
 
@@ -19,7 +16,16 @@ export class LessonsCounterComponent implements OnInit, Observer {
     this.totalLessons = data.length;
   }
 
+  error(err: any) {
+    console.log(err);
+  }
+
+  complete() {
+    console.log('completed');
+  }
+
   ngOnInit() {
+    store.lessonList$.subscribe(this);
   }
 
 }
